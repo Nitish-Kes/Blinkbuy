@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {SafeAreaView,StatusBar,Text,useColorScheme} from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 
 import { Colors } from './src/utils/Colors';
 import Register from './src/screens/Register/Register';
@@ -11,10 +12,13 @@ function App(): React.JSX.Element {
     backgroundColor: isDarkMode ? Colors.black : Colors.blue,
   };
 
+  useEffect(()=>{
+    SplashScreen.hide()
+  },[])
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <Register/>
