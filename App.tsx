@@ -8,7 +8,7 @@ function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.black : Colors.cyan,
+    backgroundColor: isDarkMode ? Colors.black : Colors.blue,
   };
 
   return (
