@@ -1,30 +1,32 @@
 import React, { useEffect } from 'react';
-import {SafeAreaView,StatusBar,useColorScheme} from 'react-native';
+import {StatusBar,useColorScheme} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
+import Toast from 'react-native-toast-message';
+import { makeStyles } from '@rneui/themed';
+import { Provider } from 'react-redux';
 
 import { Colors } from './src/utils/Colors';
-import Register from './src/screens/Register/Register';
-import { makeStyles } from '@rneui/themed';
+import { DatabaseProvider } from './src/context/DatabaseContext';
+import { store } from './src/store/store';
+import Navigation from './src/navigation';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
-  const {
-    container,
-    statusBarStyle
-  } = useStyles(isDarkMode)
+  const {statusBarStyle} = useStyles({isDarkMode})
 
-  useEffect(()=>{
-    SplashScreen.hide()
-  },[])
+  // useEffect(()=>{
+  //   SplashScreen.hide()
+  // },[])
 
   return (
-    <SafeAreaView style={container}>
-      <StatusBar
-        backgroundColor={statusBarStyle.backgroundColor}
-      />
-    <Register/>
-    </SafeAreaView>
+    <Provider store={store}>
+      <DatabaseProvider>
+        <StatusBar backgroundColor={statusBarStyle.backgroundColor}/>
+        <Navigation/>
+        <Toast/>
+      </DatabaseProvider>
+    </Provider>
   );
 }
 
@@ -32,11 +34,7 @@ type Props = {
   isDarkMode?: boolean;
 };
 
-const useStyles = makeStyles((theme,props: Props)=>({
-  container: {
-    flex: 1,
-    backgroundColor: props.isDarkMode ? Colors.black : Colors.white
-  },
+const useStyles = makeStyles((_ , props: Props)=>({
   statusBarStyle: {
     backgroundColor: props.isDarkMode ? Colors.black : Colors.blue,
   }

@@ -1,9 +1,10 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamsList } from "../../navigation/types";
 import { SCREEN_NAMES } from "../../utils/NavigationUtils";
-export interface IRegister {
+
+export interface Ilogin {
     navigation: NativeStackScreenProps<
       RootStackParamsList,
-      SCREEN_NAMES.Register
+      SCREEN_NAMES.Login
     >['navigation'];
   }
