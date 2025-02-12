@@ -43,7 +43,8 @@ const Strings = {
     thisPhoneNumberIsAlreadyRegsitered: 'This number is already registered. Please try different phone number!',
     thisemailIsAlreadyRegsitered: 'This email is already registered. Please try different email !',
     loginCredentialsError: 'Login credentials is not correct !',
-    userDoesNotExist: 'User does not exist!'
+    userDoesNotExist: 'User does not exist!',
+    signInCancelled: 'User has cancelled the sign in request'
 }
 
 export default Strings

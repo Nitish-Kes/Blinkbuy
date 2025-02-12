@@ -6,7 +6,7 @@ import {Formik} from 'formik';
 import {
   generateLoginToken,
   hashedPassword,
-  storeData,
+  setStoredObject,
 } from '../../utils/DataUtils';
 import AppLoader from '../../components/AppLoader/AppLoader';
 import {signUpFieldsSchema} from '../../utils/Validations';
@@ -19,7 +19,7 @@ import Header from '../../components/Header/Header';
 import {useAppDispatch} from '../../store/hooks';
 import Strings from '../../utils/StringConstants';
 import {SignUpPayload} from '../../types/Signup';
-import {LoginResponse} from '../../types/Login';
+import {LOGIN_TYPES, LoginResponse} from '../../types/Login';
 import renderSignUpForm from './SignupForm';
 import {AsyncKeys} from '../../utils/Keys';
 import {IRegister} from './types';
@@ -42,36 +42,32 @@ const Register = (props: IRegister) => {
     password: '',
   };
 
-  const redirectToHome = (res: LoginResponse) => {
-    dispatch(setUserData({token: res?.token}));
-    dispatch(setScreenName(AppScreenName.Home));
-  };
+    const redirectToHome = (res: LoginResponse) => {
+      const {token, email, provider} = res
+      setStoredObject(AsyncKeys.LOGIN, res);
+      dispatch(setUserData({token, email, provider}));
+      dispatch(setScreenName(AppScreenName.Home));
+    };
 
   const onSubmit = async(
     finalValues: SignUpPayload,
     {resetForm}: {resetForm: () => void},
   ) => {
     setIsLoading(true);
-    if (db) {
-      addUser(
-        db,
-        {
-          ...finalValues,
-          email: finalValues.email.toLowerCase(),
-          password: await hashedPassword(finalValues.password),
-        },
-        () => {
-          setTimeout(() => {
-            resetForm();
-            const token = generateLoginToken();
-            storeData(AsyncKeys.LOGIN, token);
-            redirectToHome({token});
-            setIsLoading(false);
-          }, 1000);
-        },
-        () => setIsLoading(false),
-      );
+    const userData = {
+      ...finalValues,
+      email: finalValues.email.toLowerCase(),
+      password: await hashedPassword(finalValues.password),
+      provider: LOGIN_TYPES.EMAIL
     }
+    const {email ,provider} = userData
+    addUser(db,userData, ()=>{
+      resetForm();
+      const token = generateLoginToken();
+      redirectToHome({token, email, provider})
+    },
+    () => setIsLoading(false),
+    )
   };
 
   return (

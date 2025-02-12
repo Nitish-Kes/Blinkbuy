@@ -7,7 +7,25 @@ export const generateLoginToken = () => {
   return uuidv4();
 };
 
-export const storeData = async (key: string, value: string) => {
+export const getStoredObject = async (key: string) => {
+  try {
+    const jsonValue = await AsyncStorage.getItem(key);
+    return jsonValue != null ? JSON.parse(jsonValue) : null;
+  } catch (e) {
+    return null;
+  }
+};
+
+export const setStoredObject = async (key: string, value: any) => {
+  try {
+    const jsonValue = JSON.stringify(value);
+    await AsyncStorage.setItem(key, jsonValue);
+  } catch (e) {
+    console.error('Error in saving ' + key);
+  }
+};
+
+export const storeData = async (key: string, value: any) => {
   try {
     await AsyncStorage.setItem(key, value);
   } catch (e) {

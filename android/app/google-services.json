@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "213703184848",
+    "project_id": "blinkbuy",
+    "storage_bucket": "blinkbuy.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:213703184848:android:cdd980ebf15dc766b929d5",
+        "android_client_info": {
+          "package_name": "com.blinkbuy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "213703184848-7vaa3v5ih9gfgugfng8lgmpfacoufc6c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.blinkbuy",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "213703184848-ftbvg5vnvb0tpv636u6i2ju0rtn1nn49.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNKpl57T08apFD_DYY1XQVUE7sEbSMrnU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "213703184848-8s22unvap88ffhf3fhvo1cedeit89il1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

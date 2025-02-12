@@ -15,10 +15,6 @@ function App(): React.JSX.Element {
 
   const {statusBarStyle} = useStyles({isDarkMode})
 
-  // useEffect(()=>{
-  //   SplashScreen.hide()
-  // },[])
-
   return (
     <Provider store={store}>
       <DatabaseProvider>

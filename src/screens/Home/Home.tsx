@@ -1,17 +1,21 @@
 import React from 'react'
 import {View,Text} from 'react-native'
-import {removeData } from '../../utils/DataUtils'
+import {getStoredObject, removeData } from '../../utils/DataUtils'
 import AppButton from '../../components/AppButton/AppButton'
 import { useAppDispatch } from '../../store/hooks'
 import { setScreenName, setUserData } from '../../store/commonSlice'
 import { AppScreenName } from '../../navigation/types'
 import { AsyncKeys } from '../../utils/Keys'
+import { socialLogout } from '../../utils/socialAuthHandler'
 
 const Home = () => {
     const dispatch = useAppDispatch()
 
-    const redirectToLogin = () => {
+    const redirectToLogin = async() => {
+        const loginData = await getStoredObject(AsyncKeys.LOGIN)
         removeData(AsyncKeys.LOGIN)
+        socialLogout(loginData?.provider)
+        
         dispatch(setUserData(null))
         dispatch(setScreenName(AppScreenName.Auth))
     }

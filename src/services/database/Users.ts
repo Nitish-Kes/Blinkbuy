@@ -1,7 +1,7 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import Toast from 'react-native-toast-message';
 
-import {User} from '../../types/Database';
+import {User, UserSocialLogin} from '../../types/Database';
 import Strings from '../../utils/StringConstants';
 import {LoginPayload} from '../../types/Login';
 import {comparePassword} from '../../utils/DataUtils';
@@ -52,13 +52,17 @@ export const addUser = async (
                   text2: Strings.soemthingWentWrong,
                 });
               }
-            }, 1000);
+            }, 500);
           },
         );
       });
   } catch (error) {
     onError();
-    console.log('err', error);
+    Toast.show({
+      type: 'error',
+      text1: Strings.duplicateError,
+      text2: Strings.soemthingWentWrong,
+    });
     throw Error('Failed to add contact');
   }
 };
@@ -82,23 +86,35 @@ export const userLogin = async (
             if (len > 0) {
               const user = results.rows.item(0);
               console.log('user',user)
-              const storedPassword = user.password;
-
-              const isMatch = await comparePassword(
-                userInfo.password,
-                storedPassword,
-              );
-
-              if (isMatch) {
-                onSuccess();
-              } else {
-                onError();
-                Toast.show({
-                  type: 'error',
-                  text1: Strings.loginError,
-                  text2: Strings.loginCredentialsError,
-                });
+              const storedPassword = user?.password;
+              if(storedPassword){
+                const isMatch = await comparePassword(
+                  userInfo.password,
+                  storedPassword,
+                );
+  
+                if (isMatch) {
+                  onSuccess();
+                } else {
+                  onError();
+                  Toast.show({
+                    type: 'error',
+                    text1: Strings.loginError,
+                    text2: Strings.loginCredentialsError,
+                  });
+                }
               }
+              else{
+                setTimeout(() => {
+                  onError();
+                  Toast.show({
+                    type: 'error',
+                    text1: Strings.loginError,
+                    text2: Strings.loginCredentialsError,
+                  });
+                }, 500);
+              }
+
             } else {
               setTimeout(() => {
                 onError();
@@ -107,7 +123,7 @@ export const userLogin = async (
                   text1: Strings.loginError,
                   text2: Strings.userDoesNotExist,
                 });
-              }, 1000);
+              }, 500);
             }
           },
           (_, err) => {
@@ -122,10 +138,86 @@ export const userLogin = async (
       });
   } catch (error) {
     onError();
-    console.log('err', error);
+    Toast.show({
+      type: 'error',
+      text1: Strings.loginError,
+      text2: Strings.soemthingWentWrong,
+    });
     throw Error('Failed to login!');
   }
 };
+
+export const userSocialLogin = async (
+  db: SQLiteDatabase | null,
+  userData: UserSocialLogin,
+  onSuccess: () => void,
+  onError?: () => void,
+) => {
+  const searchQuery = `SELECT * FROM user_table where email = ?`;
+  try {
+    if (db)
+      db.transaction(tx => {
+        tx.executeSql(
+          searchQuery,
+          [userData?.email],
+          async (txn, results) => {
+          var len = results.rows.length;
+          if(len > 0){
+            onSuccess()
+          }
+          else{
+            const insertQuery = `
+            INSERT INTO user_table (${Object.keys(userData).join(', ')})
+            VALUES (${Object.keys(userData)
+              .map(() => '?')
+              .join(', ')})
+          `;
+          const values = Object.values(userData);
+          txn.executeSql(
+            insertQuery,
+            values,
+            (_, res) => {
+              console.log('res', res, _);
+              onSuccess();
+            },
+            (_:any, err) => {
+              if (_.message === Strings.emailError) {
+                Toast.show({
+                  type: 'error',
+                  text1: Strings.duplicateError,
+                  text2: Strings.thisemailIsAlreadyRegsitered,
+                });
+              } 
+              else{
+                Toast.show({
+                  type: 'error',
+                  text1: Strings.loginError,
+                  text2: Strings.soemthingWentWrong,
+                });
+              }
+            }
+          )
+          }
+        },
+        (_, err) => {
+          Toast.show({
+            type: 'error',
+            text1: Strings.loginError,
+            text2: Strings.soemthingWentWrong,
+          });
+        }
+      )
+      })
+  }
+  catch(err){
+    Toast.show({
+      type: 'error',
+      text1: Strings.loginError,
+      text2: Strings.soemthingWentWrong,
+    });
+    throw new Error('Failed to social login')
+  }
+}
 
 export const deleteAllUsers = async (db: SQLiteDatabase | null) => {
   try {
