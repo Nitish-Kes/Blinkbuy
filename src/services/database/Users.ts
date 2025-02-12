@@ -153,13 +153,13 @@ export const userSocialLogin = async (
   onSuccess: () => void,
   onError?: () => void,
 ) => {
-  const searchQuery = `SELECT * FROM user_table where email = ?`;
+  const searchQuery = `SELECT * FROM user_table where email = ? and provider = ?`;
   try {
     if (db)
       db.transaction(tx => {
         tx.executeSql(
           searchQuery,
-          [userData?.email],
+          [userData?.email,userData?.provider],
           async (txn, results) => {
           var len = results.rows.length;
           if(len > 0){

@@ -17,5 +17,6 @@ export type User = {
 export type UserSocialLogin = {
     firstName: string | null,
     lastName: string | null,
-    email: string
+    email: string,
+    provider: LOGIN_TYPES
 }

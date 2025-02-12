@@ -16,7 +16,7 @@ import {
 import {generateLoginToken, setStoredObject, storeData} from '../../utils/DataUtils';
 import {LOGIN_TYPES, LoginPayload, LoginResponse} from '../../types/Login';
 import {setScreenName, setUserData} from '../../store/commonSlice';
-import {googleAuthHandler} from '../../utils/socialAuthHandler';
+import {facebookAuthHandler, googleAuthHandler} from '../../utils/socialAuthHandler';
 import AppLoader from '../../components/AppLoader/AppLoader';
 import {AppScreenName} from '../../navigation/types';
 import Header from '../../components/Header/Header';
@@ -51,13 +51,31 @@ const Login = (props: Ilogin): JSX.Element => {
     setIsLoading(true);
     const userData = await googleAuthHandler();
     if(userData){
-      const {idToken: token, provider, ...userInfo} = userData
+      const {idToken: token, ...userInfo} = userData
       userSocialLogin(db, userInfo, () => {
-        redirectToHome({email: userInfo?.email,token,provider})
+        redirectToHome({email: userInfo?.email,provider: userInfo?.provider,token})
       })
     }
     setIsLoading(false)
   };
+
+  const handleFacebookSignin = async () => {
+    setIsLoading(true)
+    const {authData,token}: any = await facebookAuthHandler() ?? {}
+    if(authData){
+      const userData = authData?.additionalUserInfo?.profile
+      const userInfo = {
+        firstName: userData?.first_name,
+        lastName: userData?.last_name,
+        email: userData?.email,
+        provider: LOGIN_TYPES.FACEBOOK
+      }
+      userSocialLogin(db,userInfo,()=>{
+        redirectToHome({email: userInfo?.email,provider: userInfo?.provider,token})
+      })
+    }
+    setIsLoading(false)
+  }
 
   const onSubmit = (
     finalValues: LoginPayload,
@@ -104,7 +122,7 @@ const Login = (props: Ilogin): JSX.Element => {
          <AppButton
           title={Strings.continuewithfacebook}
           icon={<FacebookIcon />}
-          onPress={() => {}}
+          onPress={handleFacebookSignin}
           buttonStyle={styles.socialSignInButton}
           titleStyle={styles.socialSignInButtonTitle}
         />
