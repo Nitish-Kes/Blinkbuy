@@ -4,7 +4,7 @@ import {Formik} from 'formik';
 import {useState} from 'react';
 
 import Strings from '../../utils/StringConstants';
-import {AppleIcon, GoogleIcon, MicrosoftIcon} from '../../assets/svg';
+import {FacebookIcon, GoogleIcon, MicrosoftIcon} from '../../assets/svg';
 import AppButton from '../../components/AppButton/AppButton';
 import {loginFieldSchema} from '../../utils/Validations';
 import {SCREEN_NAMES} from '../../utils/NavigationUtils';
@@ -101,16 +101,16 @@ const Login = (props: Ilogin): JSX.Element => {
           buttonStyle={styles.socialSignInButton}
           titleStyle={styles.socialSignInButtonTitle}
         />
-        <AppButton
-          title={Strings.continuewithMicrosoft}
-          icon={<MicrosoftIcon />}
+         <AppButton
+          title={Strings.continuewithfacebook}
+          icon={<FacebookIcon />}
           onPress={() => {}}
           buttonStyle={styles.socialSignInButton}
           titleStyle={styles.socialSignInButtonTitle}
         />
         <AppButton
-          title={Strings.continuewithapple}
-          icon={<AppleIcon />}
+          title={Strings.continuewithMicrosoft}
+          icon={<MicrosoftIcon />}
           onPress={() => {}}
           buttonStyle={styles.socialSignInButton}
           titleStyle={styles.socialSignInButtonTitle}

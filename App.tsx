@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import {StatusBar,useColorScheme} from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
+import {LogBox, StatusBar,useColorScheme} from 'react-native';
 import Toast from 'react-native-toast-message';
 import { makeStyles } from '@rneui/themed';
 import { Provider } from 'react-redux';
@@ -14,6 +13,10 @@ function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const {statusBarStyle} = useStyles({isDarkMode})
+
+  useEffect(() => {
+    LogBox.ignoreAllLogs(true);
+  }, []);
 
   return (
     <Provider store={store}>

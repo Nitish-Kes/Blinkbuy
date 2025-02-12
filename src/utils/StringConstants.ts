@@ -26,7 +26,7 @@ const Strings = {
     passwordNumberMatch: 'Password must contain atleast 1 number(0-9)',
     passwordSpecialCharactersMatch: 'Password must contain atleast 1 special character(!@#$%^&*)',
     continuewithGoogle: "Continue with Google",
-    continuewithapple: "Continue with Apple",
+    continuewithfacebook: "Continue with Facebook",
     continuewithMicrosoft: "Continue with Microsoft",
     alreadyHaveAccount: 'Already have cccount?',
     newUser: 'New user?',

@@ -21,5 +21,5 @@ export enum LOGIN_TYPES {
     EMAIL,
     GOOGLE,
     MICROSOFT,
-    APPLE
+    FACEBOOK
 }
